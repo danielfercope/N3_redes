@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Filme</title>
+
+    <style>
+        /* Estilos (se necessário) */
+    </style>
+</head>
+<body>
+
+    <h1>Detalhes do Filme</h1>
+
+    <div id="movie-details"></div>
+
+    <script>
+        const apiKey = '8fd1b12aab1ef737469090552fa4b84b';
+        const urlParams = new URLSearchParams(window.location.search);
+        const movieId = urlParams.get('id');
+        const apiUrl = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}`;
+
+        function formatReleaseDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+
+        async function loadMovieDetails() {
+            try {
+                const response = await fetch(apiUrl);
+                const movie = await response.json();
+
+                const movieDetails = document.getElementById('movie-details');
+                movieDetails.innerHTML = `
+                    <h2>${movie.title}</h2>
+                    <img src="https://image.tmdb.org/t/p/w500/${movie.poster_path}" alt="${movie.title}">
+                    <p>Ano de Lançamento: ${formatReleaseDate(movie.release_date)}</p>
+                    <p>Sinopse: ${movie.overview}</p>
+                    <p>Nota: ${movie.vote_average}</p>
+                `;
+            } catch (error) {
+                console.error('Erro ao carregar detalhes do filme:', error.message);
+            }
+        }
+
+        window.onload = loadMovieDetails;
+    </script>
+
+</body>
+</html>

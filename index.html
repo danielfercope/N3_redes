@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Filmes TMDB</title>
+
+    <style>
+        body {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        h1 {
+            width: 100%;
+            text-align: center;
+        }
+
+        ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 0;
+        }
+
+        li {
+            flex: 0 0 300px; /* Define a largura máxima do item */
+            margin: 10px;
+            text-align: center;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Lista de Filmes</h1>
+
+    <ul id="movie-list"></ul>
+
+
+    <script>
+        // Substitua 'SUA_API_KEY' pela sua chave de API do TMDB
+        const apiKey = '8fd1b12aab1ef737469090552fa4b84b';
+        const apiUrl = 'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=' + apiKey;
+
+        // Função para formatar a data de lançamento
+        function formatReleaseDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+
+        // Função para carregar a lista de filmes
+        async function loadMovies() {
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                const movieList = document.getElementById('movie-list');
+
+                // Iterar sobre os resultados e criar elementos de lista
+                data.results.forEach(movie => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <h2>${movie.title}</h2>
+                        <div><a href="#"><img src="https://image.tmdb.org/t/p/w185/${movie.poster_path}" alt="${movie.title}"></a></div>
+                        <p>Ano de Lançamento: ${formatReleaseDate(movie.release_date)}</p>
+                    `;
+
+                    listItem.addEventListener('click', function() {
+                    window.location.href = `filme.html?id=${movie.id}`;
+                    });
+
+                    movieList.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error('Erro ao carregar filmes:', error.message);
+            }
+        }
+
+        // Chamar a função para carregar os filmes quando a página carregar
+        window.onload = loadMovies;
+    </script>
+
+</body>
+</html>
