@@ -46,6 +46,14 @@
 
 
     <script>
+
+        var isAuthenticated = localStorage.getItem("isAuthenticated");
+        if (!isAuthenticated) {
+            // Redireciona para a página de login se não houver usuário autenticado
+            window.location.href = "login.html";
+        }
+        
+
         // Substitua 'SUA_API_KEY' pela sua chave de API do TMDB
         const apiKey = '8fd1b12aab1ef737469090552fa4b84b';
         const apiUrl = 'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=' + apiKey;

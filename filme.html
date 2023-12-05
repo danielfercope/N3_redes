@@ -16,6 +16,13 @@
     <div id="movie-details"></div>
 
     <script>
+        
+        var isAuthenticated = localStorage.getItem("isAuthenticated");
+        if (!isAuthenticated) {
+            // Redireciona para a página de login se não houver usuário autenticado
+            window.location.href = "login.html";
+        }
+
         const apiKey = '8fd1b12aab1ef737469090552fa4b84b';
         const urlParams = new URLSearchParams(window.location.search);
         const movieId = urlParams.get('id');
